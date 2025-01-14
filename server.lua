@@ -31,13 +31,10 @@ while true do
         break
     end
 
-    -- Print the request line for debugging
     print("Received request: " .. request_line)
 
-    -- Initialize variables to hold headers and body
     local headers = {}
     local body_server = ""
-
     -- Read the headers
     while true do
         local line, err = client:receive("*l")
@@ -50,7 +47,6 @@ while true do
             headers[key:lower()] = value
         end
     end
-
     -- If this is a POST request, read the body
     if string.match(request_line, "POST") then
         if headers["content-length"] then
@@ -62,20 +58,11 @@ while true do
     local plain_text_response = "recieved! " .. (body_server or "wait nvm")
     local response = "HTTP/1.1 200 OK\r\n" .. "Content-Type: text/plain; charset=UTF-8\r\n" .. "Content-Length: " .. #plain_text_response .. "\r\n" .. "Connection: close\r\n\r\n" .. plain_text_response
 
-    -- Print the POST body (for debugging)
     client:send(response)
     print("Received POST body: " .. body_server)
-    
-    client:close()
 
     -- for email part start!!!
 
-    -- SMTP username (your email)
-    -- SMTP password
-    -- SMTP server (e.g., "smtp.gmail.com")
-    -- SMTP server port (587 for TLS, 465 for SSL, 25 for non-secure)
-
-    -- for email part end
     mesgt = {
         headers = {
             to = "Admin Ms Ivy <ivy@cosyivy.xyz>",
@@ -84,7 +71,6 @@ while true do
         },
         body = "recieved from website! it is as follows..." .. "\"" .. body_server .. "\""
     }
-    
     result, error_msg = smtp.send{
         from = "<bot@cosyivy.xyz>",
         rcpt = "<ivy@cosyivy.xyz>",
@@ -99,5 +85,6 @@ while true do
         print("Email sent successfully!")
     end
     
+    client:close()
 end
 
