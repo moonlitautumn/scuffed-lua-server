@@ -1,5 +1,11 @@
 #! /bin/bash
 
+sleeptimeidk="10s"
+
+echo "this script will detect if your isp changes your public ip, saving the new ip in a txt file for easy access!"
+echo "> it will wait $sleeptimeidk before checking again"
+echo ""
+
 while true; do
     ip=$(hostname -i)
     iptxt=$(cat currentip.txt)
@@ -7,18 +13,21 @@ while true; do
     datee=$(date)
     
     if [ "$iptxt" = "$ip" ]; then
-        echo "the ip didnt change!! current time: ${datee}" 
+        echo "> ${datee}" 
+        echo "current ip -> $iptxt"
+        echo ""
     else
+        echo "================"
+        echo "ip was -> $iptxt"
         echo $ip > currentip.txt
-        echo "it changed at: ${datee}"
-        echo "ip is now: $iptxt"
-        
+        echo "it changed at -> ${datee}"
+        echo "================"
         # TO BE SETUP ONCE THE SERVER HAS AN API
-        echo "atempting to change dns ip via api...."
+        echo "atempting to change dns ip via api.... (not really yet)"
         #curl add-api-call-function-here
     
     fi
 
-    sleep 60s
+    sleep $sleeptimeidk
     
 done

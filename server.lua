@@ -1,8 +1,5 @@
 local socket = require("socket")
 local smtp = require("socket.smtp")
-local ssl = require 'ssl'
-local https = require 'ssl.https'
-local ltn12 = require 'ltn12'
 
 --[[ old code to dynamically update ip
 
@@ -79,5 +76,28 @@ while true do
     -- SMTP server port (587 for TLS, 465 for SSL, 25 for non-secure)
 
     -- for email part end
+    mesgt = {
+        headers = {
+            to = "Admin Ms Ivy <ivy@cosyivy.xyz>",
+            cc = '"silly bot thingy" <bot@cosyivy.xyz>',
+            subject = "message recieved!"
+        },
+        body = "recieved from website! it is as follows..." .. "\"" .. body_server .. "\""
+    }
+    
+    result, error_msg = smtp.send{
+        from = "<bot@cosyivy.xyz>",
+        rcpt = "<ivy@cosyivy.xyz>",
+        server = "smtp.cozyivy.xyz", --or localhost???? idk yet i need the smtp server to be running first
+        port = 123123123, --idk set this l8tr
+        source = smtp.message(mesgt)
+    }
+  
+    if not result then
+        print("Error sending email: " .. error_msg)
+    else
+        print("Email sent successfully!")
+    end
+    
 end
 
